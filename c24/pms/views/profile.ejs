@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POSTGRES BREAD</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+  <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse  navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header"><a class="navbar-brand" href="#">Project Management System</a></div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="projects">Project</a></li>
+          <li class="active"><a href="#">Profile</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="logout">Logout</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div class="container">
+    <br><br><br>
+    <h1>Profile</h1>
+    <form class="" action="/search" method="get">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="id" id="email" placeholder="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+      </div>
+      <label for="position">Position</label>
+      <div class="radio">
+        <label>
+          <input type="radio" name="position" id="position" value="Manager" checked>
+          Manager
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="position" id="position" value="Software Developer">
+          Software Developer
+        </label>
+      </div>
+      <div class="radio disabled">
+        <label>
+          <input type="radio" name="position" id="position" value="Quality Assurance">
+          Quality Assurance
+        </label>
+      </div>
+      <label for="type">Type</label>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="type" id="type" value="fulltime" checked>
+          Fulltime
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  </div>
+</body>
+</html>
