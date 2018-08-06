@@ -32,11 +32,11 @@
   </nav>
   <div class="container">
     <br><br><br>
-    <h1>Add Project</h1>
+    <h1>Edit Project</h1>
     <form class="" action="" method="POST">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="name" class="form-control" name="name" id="name" placeholder="Project Name">
+        <input type="name" class="form-control" name="name" id="name" value="<%= project[0].name %>">
       </div>
       <label for="members">Members</label>
       <% for(let i = 0; i < user.length; i++){ %>
@@ -47,8 +47,8 @@
         </label>
       </div>
       <% } %>
-      <button type="submit" class="btn btn-primary">Save</button>
-      <a href="projects" class="btn btn-warning">Cancel</a>
+      <button type="submit" class="btn btn-primary">Update</button>
+      <a href="../projects" class="btn btn-warning">Cancel</a>
       <% if(alert){ %><h3><span class="label label-danger">Name and members must be filled!!!</span></h3><% } %>
     </form>
   </div>
