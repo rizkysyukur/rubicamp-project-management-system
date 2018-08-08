@@ -22,10 +22,10 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Project</a></li>
-          <li><a href="profile">Profile</a></li>
+          <li><a href="../profile">Profile</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="logout">Logout</a></li>
+          <li><a href="../logout">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <% for(let i = 0; i < user.length; i++){ %>
       <div class="checkbox" required>
         <label>
-          <input type="checkbox" name="members" id="members" value="<%= user[i].userid %>">
+          <input type="checkbox" name="members" id="members" value="<%= user[i].userid %>" <%= util.cekMember(user[i].userid, project) ? "checked" : "" %>>
           <%= `${user[i].firstname} ${user[i].lastname}` %>
         </label>
       </div>
