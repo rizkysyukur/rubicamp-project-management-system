@@ -35,14 +35,14 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
       <ul class="list-unstyled components">
-        <li class="active">
-          <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <li>
+          <a href="../projects_overview/<%= id %>">
             <i class="fas fa-home"></i>
             Overview
           </a>
         </li>
-        <li>
-          <a href="../projects_activity/<%= id %>">
+        <li class="active">
+          <a href="#">
             <i class="fas fa-briefcase"></i>
             Activity
           </a>
@@ -67,35 +67,31 @@
           <i class="fas fa-align-left"></i>
           <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
         </button>
-        <h1>Overview</h1>
+        <h1>Activity</h1>
         <div class="panel panel-default">
           <div class="panel-body">
-            <p>Issue tracking</p>
-            <ul>
-              <li>Bug : <%= bug %> Open / <%= b_amount %></li>
-              <li>Feature : <%= feature %> Open / <%= f_amount %></li>
-              <li>Support : <%= support %> Open / <%= s_amount %></li>
-            </ul>
+            <p>Activity</p>
+            <p>From <%= dateBefore %> TO <%= dateNow %></p>
+            <% for(let i = 0; i < log.length; i++){ %>
+              <p><%= log[i].day %></p>
+              <ul>
+                <% for(let j = 0; j < log[i].note.length; j++){ %>
+                  <li><%= log[i].note[j].note %></li>
+                  <% } %>
+                </ul>
+                <% } %>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <p>Members</p>
-            <ul>
-              <% for(let i = 0; i < users.length; i++){ %><li><%= users[i].firstname %> <%= users[i].lastname %></li><% } %>
-              </ul>
-          </div>
-        </div>
-      </div>
 
-      <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-      <script type="text/javascript">
-      $(document).ready(function () {
-        $('#sidebarCollapse').on('click', function () {
-          $('#sidebar').toggleClass('active');
-        });
-      });
-      </script>
-    </body>
-    </html>
+          <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+          <script type="text/javascript">
+          $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+              $('#sidebar').toggleClass('active');
+            });
+          });
+          </script>
+        </body>
+        </html>
