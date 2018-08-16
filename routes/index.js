@@ -205,8 +205,10 @@ module.exports = function(pool){
   router.get('/delete/:id', helpers, function(req, res, next){
     let id = req.params.id;
     executeDB(`DELETE FROM members WHERE projectid = ${id}`, function(){
-      executeDB(`DELETE FROM projects WHERE projectid = ${id}`, function(){
-        res.redirect("../projects");
+      executeDB(`DELETE FROM issues WHERE projectid = ${id}`, function(){
+          executeDB(`DELETE FROM projects WHERE projectid = ${id}`, function(){
+            res.redirect("../projects");
+        });
       });
     });
   });
@@ -378,20 +380,20 @@ module.exports = function(pool){
     let sevenDates = util.get7Dates();
     let sevenDays = util.get7Days();
     let log = [];
-    getDB(`SELECT note FROM log WHERE logdate='${sevenDates[0]}'`, function(note){
-      if(note.length > 0) log.push({day: "Today", note: note});
-      getDB(`SELECT note FROM log WHERE logdate='${sevenDates[1]}'`, function(note){
-        if(note.length > 0) log.push({day: sevenDays[1], note: note});
-        getDB(`SELECT note FROM log WHERE logdate='${sevenDates[2]}'`, function(note){
-          if(note.length > 0) log.push({day: sevenDays[2], note: note});
-          getDB(`SELECT note FROM log WHERE logdate='${sevenDates[3]}'`, function(note){
-            if(note.length > 0) log.push({day: sevenDays[3], note: note});
-            getDB(`SELECT note FROM log WHERE logdate='${sevenDates[4]}'`, function(note){
-              if(note.length > 0) log.push({day: sevenDays[4], note: note});
-              getDB(`SELECT note FROM log WHERE logdate='${sevenDates[4]}'`, function(note){
-                if(note.length > 0) log.push({day: sevenDays[5], note: note});
-                getDB(`SELECT note FROM log WHERE logdate='${sevenDates[6]}'`, function(note){
-                  if(note.length > 0) log.push({day: sevenDays[6], note: note});
+    getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[0]}'`, function(note){
+      if(note.length > 0) log.push({day: `Today - ${sevenDays[0]}, ${sevenDates[0]}`, note: note});
+      getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[1]}'`, function(note){
+        if(note.length > 0) log.push({day: `Yesterday - ${sevenDays[1]}, ${sevenDates[1]}`, note: note});
+        getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[2]}'`, function(note){
+          if(note.length > 0) log.push({day: `${sevenDays[2]}, ${sevenDates[2]}`, note: note});
+          getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[3]}'`, function(note){
+            if(note.length > 0) log.push({day: `${sevenDays[3]}, ${sevenDates[3]}`, note: note});
+            getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[4]}'`, function(note){
+              if(note.length > 0) log.push({day: `${sevenDays[4]}, ${sevenDates[4]}`, note: note});
+              getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[4]}'`, function(note){
+                if(note.length > 0) log.push({day: `${sevenDays[5]}, ${sevenDates[5]}`, note: note});
+                getDB(`SELECT note FROM activity WHERE logdate='${sevenDates[6]}'`, function(note){
+                  if(note.length > 0) log.push({day: `${sevenDays[6]}, ${sevenDates[6]}`, note: note});
                   res.render('projects_activity', {
                     id: id,
                     log: log,
@@ -443,12 +445,15 @@ module.exports = function(pool){
     let id = req.params.id;
     getDB(`SELECT users.userid AS userid, firstname, lastname FROM users, members WHERE users.userid = members.userid AND projectid = ${id}`, function(users){
       getDB(`SELECT userid FROM users WHERE email='${req.session.email}'`, function(userid){
-        res.render('add_project_issue', {
-          id: id,
-          alert: false,
-          util: util,
-          userid: userid[0].userid,
-          users: users
+        getDB(`SELECT issuesid FROM issues WHERE projectid =  ${id}`, function(issuesid){
+          res.render('add_project_issue', {
+            id: id,
+            alert: false,
+            util: util,
+            userid: userid[0].userid,
+            users: users,
+            issuesid: issuesid
+          });
         });
       });
     });
@@ -478,8 +483,8 @@ module.exports = function(pool){
 
     executeDB(sql, function(){
       getDB(`SELECT issuesid FROM issues ORDER BY issuesid DESC LIMIT 1`, function(issuesid){
-        getDB(`SELECT firstname FROM users WHERE userid=${author}`, function(user){
-          insertLog(subject, issuesid[0].issuesid, "add issue", status, user[0].firstname, function(){
+        getDB(`SELECT firstname FROM users WHERE email='${req.session.email}'`, function(user){
+          insertLog(subject, issuesid[0].issuesid, "added issue", status, user[0].firstname, function(){
             res.redirect(`../projects_issues/${projectid}`);
           });
         });
@@ -512,7 +517,7 @@ module.exports = function(pool){
     if(assignee != "not select" && ck_assignee != 0) condition.push(`assignee='${assignee}'`);
 
     if(condition.length > 0){
-      getDB(`SELECT * FROM issues WHERE projectid = ${id} AND ${condition.join(" AND ")}`, function(data){ // get data projects
+      getDB(`SELECT * FROM issues WHERE projectid = ${id} AND ${condition.join(" AND ")} ORDER BY issuesid DESC`, function(data){ // get data projects
         getDB(`SELECT * FROM colum_issues WHERE email = '${req.session.email}'`, function(colum){ // control which colum will be show
           getDB(`SELECT issuesid FROM issues`, function(issueid){
             getDB(`SELECT userid, firstname FROM users`, function(users){
@@ -536,8 +541,16 @@ module.exports = function(pool){
   });
 
   router.get('/delete_issue/:id/:issuesid', helpers, function(req, res, next){
-    executeDB(`DELETE FROM issues WHERE issuesid = ${req.params.issuesid}`, function(){
-      res.redirect(`../../projects_issues/${req.params.id}`);
+    let issuesid = req.params.issuesid;
+    let projectid = req.params.id;
+    getDB(`SELECT subject, status FROM issues WHERE issuesid = ${issuesid}`, function(issues){
+      getDB(`SELECT firstname FROM users WHERE email='${req.session.email}'`, function(user){
+        insertLog(issues[0].subject, issuesid, "deleted issue", issues[0].status, user[0].firstname, function(){
+          executeDB(`DELETE FROM issues WHERE issuesid = ${issuesid}`, function(){
+            res.redirect(`../../projects_issues/${projectid}`);
+          });
+        });
+      });
     });
   });
 
@@ -575,12 +588,15 @@ module.exports = function(pool){
     let issuesid = req.params.issuesid;
     getDB(`SELECT * FROM issues WHERE projectid = ${id} AND issuesid = ${issuesid}`, function(issues){
       getDB(`SELECT users.userid AS userid, firstname, lastname FROM users, members WHERE users.userid = members.userid AND projectid = ${id}`, function(users){
-        res.render('edit_project_issue', {
-          id: id,
-          alert: false,
-          util: util,
-          users: users,
-          issues: issues[0]
+        getDB(`SELECT issuesid FROM issues WHERE projectid =  ${id}`, function(issuesid){
+          res.render('edit_project_issue', {
+            id: id,
+            alert: false,
+            util: util,
+            users: users,
+            issues: issues[0],
+            issuesid: issuesid
+          });
         });
       });
     });
@@ -604,12 +620,11 @@ module.exports = function(pool){
     setData.push(`createdate = '${req.body.createdate}'`)
     setData.push(`updateddate = '${req.body.updateddate}'`)
     setData.push(`closedate = '${req.body.closedate}'`)
-    setData.push(`parenttask = ${req.body.parenttask}`)
+    setData.push(`parenttask = ${req.body.parenttask || 0}`)
     setData.push(`assignee = ${req.body.assignee}`)
     let sql = `UPDATE issues SET ${setData.join(", ")} WHERE issuesid = ${issuesid}`;
-    console.log(sql);
     executeDB(sql, function(){
-      getDB(`SELECT firstname FROM users WHERE userid=${req.body.author}`, function(user){
+      getDB(`SELECT firstname FROM users WHERE email='${req.session.email}'`, function(user){
         insertLog(req.body.subject, issuesid, "modified issue", req.body.status, user[0].firstname, function(){
           res.redirect(`../../projects_issues/${req.params.id}`);
         });
@@ -627,7 +642,8 @@ module.exports = function(pool){
     let date = new Date();
     let dateNow = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`;
     let note = `${date.getHours()}:${date.getMinutes()} ${subject} #${issuesid} (${status}): ${description}, author: ${author}`;
-    executeDB(`INSERT INTO log (logdate, note) VALUES ('${dateNow}', '${note}')`, cb);
+    console.log();
+    executeDB(`INSERT INTO activity (logdate, note) VALUES ('${dateNow}', '${note}')`, cb);
   }
 
   function getDB(sql, cb){

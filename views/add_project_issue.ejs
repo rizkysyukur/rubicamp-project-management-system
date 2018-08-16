@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POSTGRES BREAD</title>
+  <title>PMS</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -162,7 +162,12 @@
 
           <div class="form-group">
             <label for="parenttask">Parent Task</label>
-            <input type="text" class="form-control" name="parenttask" id="parenttask" placeholder="Id Parent Task...">
+            <select id="parenttask" name="parenttask" class="form-control">
+              <option value="">Choose ID</option>
+              <% for(let i=0; i < issuesid.length; i++){ %>
+                <option value="<%= issuesid[i].issuesid %>"><%= issuesid[i].issuesid %></option>
+              <% } %>
+            </select>
           </div>
 
           <div class="form-group">
@@ -177,7 +182,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="../projects_issues/<%= id %>" class="btn btn-warning">Cancel</a>
+      <a href="../../projects_issues/<%= id %>" class="btn btn-warning">Cancel</a>
       <% if(alert){ %><h3><span class="label label-danger">Members must be filled!!!</span></h3><% } %>
     </form>
   </div><br><br>

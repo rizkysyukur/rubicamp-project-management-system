@@ -19,7 +19,7 @@ module.exports = {
       month = '0' + month;
     }
     // YYYY-MM-DD
-    return `${year}/${month}/${day}`;
+    return `${month}/${day}/${year}`;
   },
 
   get7Dates: function(){

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POSTGRES BREAD</title>
+  <title>PMS</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -21,7 +21,7 @@
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Project</a></li>
+          <li class="active"><a href="../logout">Project</a></li>
           <li><a href="../profile">Profile</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -48,7 +48,7 @@
       </div>
       <% } %>
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="projects" class="btn btn-warning">Cancel</a>
+      <a href="../projects" class="btn btn-warning">Cancel</a>
       <% if(alert){ %><h3><span class="label label-danger">Name and members must be filled!!!</span></h3><% } %>
     </form>
   </div>

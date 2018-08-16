@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POSTGRES BREAD</title>
+  <title>PMS</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -21,7 +21,7 @@
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/projects">Project</a></li>
+          <li class="active"><a href="../projects">Project</a></li>
           <li><a href="../profile">Profile</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -161,7 +161,12 @@
 
           <div class="form-group">
             <label for="parenttask">Parent Task</label>
-            <input type="text" class="form-control" name="parenttask" id="parenttask" placeholder="Id Parent Task..." value="<%= issues.parenttask %>">
+            <select id="parenttask" name="parenttask" class="form-control">
+              <option value="">Choose ID</option>
+              <% for(let i=0; i < issuesid.length; i++){ %>
+                <option value="<%= issuesid[i].issuesid %>" <%= issuesid[i].issuesid == issues.parenttask ? "selected" : "" %>><%= issuesid[i].issuesid %></option>
+              <% } %>
+            </select>
           </div>
 
           <div class="form-group">
